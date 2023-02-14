@@ -1,0 +1,215 @@
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+   
+  }
+.header_container {
+    width: 100%;
+    height: 80px;
+    padding: 0 80px;
+    background-color: white;
+}
+
+.mobile_head {
+    display: none;
+}
+
+.logo_image {
+    width: 100px;
+    height: auto;
+}
+
+.space_between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.related {
+    position: relative;
+    display: 100%;
+    background-color: white;
+}
+
+.searcger {
+    width: 100%;
+    display: flex;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.containing{
+    width: 500px ;
+     margin-bottom: 15px ;
+      position: relative
+}
+
+.center_div {
+    padding: 7px;
+    padding-left: 17px;
+    border-radius: 30px;
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    align-items: center;
+    border: 1px solid var(--gray);
+    background-color: white;
+    box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -webkit-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -moz-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+}
+.input_cont {
+    padding:  10px ;
+    padding-left: 20px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--gray);
+    background-color: white;
+    width: 100%;
+    box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -webkit-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -moz-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+}
+.titll{
+font-size: 12px;
+margin-bottom: 3px;
+color: rgb(120, 120, 120);
+}
+
+.input_{
+    flex: 1;
+    outline: none;
+    border: 0;
+
+}
+.input_cont button {
+    background-color: red;
+    color: white;
+    border-radius: 15px;
+    border: none;
+    height: 30px;
+    width: 55px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+.center_div:hover {
+    box-shadow: 0px 2px 3px rgba(235, 235, 235, 0.94);
+}
+
+.text_filter {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--dark);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+}
+
+.text_filterv2 {
+    font-size: 14px;
+    font-weight: 300;
+    margin-right: 17px;
+}
+
+.cirle_red {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider {
+    height: 24px;
+    width: 1px;
+    background-color: #DDDDDD;
+    margin-left: 22px;
+    margin-right: 22px;
+}
+
+.right_user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.right_user a {
+    text-decoration: none;
+
+}
+
+._user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--gray);
+    border-radius: 30px;
+    padding: 5px;
+    padding-left: 10px;
+    color: var(--dark);
+}
+.selector_container {
+    background-color: white;
+    box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -webkit-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    -moz-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    border-radius: 15px;
+    position: absolute; 
+    top : 65px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.selector{
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+@media (max-width : 768px) {
+    .header_container {
+        display: none;
+    }
+
+    .mobile_head {
+        display: block;
+        padding: 10px 20px;
+        width: 100%;
+        background-color: white;
+    }
+
+    .mobile_header {
+        padding: 12px;
+        border-radius: 30px;
+        width: 100%;
+        display: flex;
+        cursor: pointer;
+        user-select: none;
+        align-items: center;
+        border: 1px solid var(--gray);
+        box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+        -webkit-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+        -moz-box-shadow: 0px 1px 7px rgba(235, 235, 235, 0.94);
+    }
+
+    .containing{
+        width: 95% ;
+         margin-bottom: 15px ;
+    }
+}

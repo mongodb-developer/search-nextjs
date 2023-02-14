@@ -1,0 +1,76 @@
+.card{
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+  }
+
+  .card .header{
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-direction: column;
+  }
+  .header .img{
+    height: 250px;
+    width: 100%;
+    background: #d9d9d9;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header .details{
+    width: 100%;
+  }
+  .details span{
+    display: block;
+    background: #d9d9d9;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .details .name{
+    height: 14px;
+    width: 100%;
+  }
+  .details .about{
+    height: 13px;
+    width: 60%;
+    margin-top: 10px;
+  }
+  .details .about1{
+    height: 10px;
+    width: 150px;
+    margin-top: 10px;
+  }
+
+
+  .header .img::before,
+  .details span::before,
+  .description .line::before,
+  .btns .btn::before{
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to right, #d9d9d9 0%, rgba(0,0,0,0.05) 20%, #d9d9d9 40%, #d9d9d9 100%);
+    background-repeat: no-repeat;
+    background-size: 450px 400px;
+    animation: shimmer 1s linear infinite;
+  }
+  .header .img::before{
+    background-size: 650px 600px;
+  }
+  .details span::before{
+    animation-delay: 0.2s;
+  }
+
+
+  @keyframes shimmer {
+    0%{
+      background-position: -450px 0;
+    }
+    100%{
+      background-position: 450px 0;
+    }
+  }

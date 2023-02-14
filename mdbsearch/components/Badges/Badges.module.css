@@ -1,0 +1,107 @@
+.badge_cont {
+  /* width: 100%; */
+  user-select: none;
+  padding: 0 80px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: white;
+}
+.addShadow{
+  box-shadow: rgb(0 0 0 / 16%) 0 0 6px;
+}
+
+.badges {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 75px;
+  cursor: pointer;
+  white-space: nowrap;
+  /* background-color: aqua; */
+}
+
+/* #badges:hover + #tab_flex{
+  color: red;
+} */
+
+.badges img{
+  width: 24px;
+  height: 24px;
+}
+
+.tab_flex{
+  color: #484848;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tab_flex_active{
+  color: #000000;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.tab_flex_active::before{
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  border-radius: 7px;
+  height: 2.5px;
+  background-color: #000000;
+}
+
+.swiper-button-next {
+  color: green !important;
+}
+
+.swiper-button-prev {
+  color: black !important;
+  width: 27px !important;
+  height: 27px !important;
+  background-color: white;
+  border-radius: 50%;
+  border: 0.5px solid rgb(0 0 0 / 0.3) !important;
+  box-shadow: rgb(0 0 0 / 16%) 0 0 6px; 
+}
+
+.swiper-button-next {
+  color: black !important;
+  width: 27px !important;
+  height: 27px !important;
+  background-color: white;
+  border-radius: 50%;
+  border: 0.5px solid rgb(0 0 0 / 0.3) !important;
+  box-shadow: rgb(0 0 0 / 16%) 0 0 6px; 
+}
+
+.swiper-button-prev::after{
+  font-size: 14px !important;
+}
+.swiper-button-next::after{
+  font-size: 14px !important;
+}
+
+.swiper-button-disabled {
+  display: none !important;
+}
+
+.badge_cont::-webkit-scrollbar {
+  background: transparent;
+  background-color: none;
+}
+
+.badge_cont::-webkit-scrollbar-thumb {
+  background-color: none;
+}
+
+@media screen and (max-width: 900px) {
+    .badge_cont {
+        padding: 0 10px;
+  }
+}
