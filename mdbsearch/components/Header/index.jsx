@@ -60,69 +60,16 @@ const Header = () => {
     } = useCategoryContext()
 
     const handleChange = async (e) => {
-        if (showing === "Country") {
-            setCountry(e.target.value);
-            if(e.target.value.length > 1){
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}country/autocomplete/${e.target.value}`)
-                .then((response) => response.json())
-                .then(async (res) => {
-                    setsug_countries(res)
-                })
-            }
-            else{
-                setsug_countries([])
-            }
-        }
-        else {
-            setTown(e.target.value)
-            if(e.target.value.length > 1){
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}town/autocomplete/${e.target.value}`)
-                .then((response) => response.json())
-                .then(async (res) => {
-                    setsug_town(res)
-                })
-            }
-            else{
-                setsug_town([])
-            }
-        }
+        setCountry(e.target.value);
+
+        //to be updated 
     }
 
     const searchNow = async (e) => {
         e.preventDefault();
         setshow(false)
 
-        let search_params = JSON.stringify({
-            street: town,
-            country: country, 
-            category: `${activeCategory}`
-        })
-        setLoading(true)
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}search/${search_params}`)
-            .then((response) => response.json())
-            .then(async (res) => {
-                // console.log(res,"porto search")
-                updateCategory(activeCategory, res)
-                if (country !== "") {
-                    router.query.country = country
-                    setcountryValue(country)
-                }
-                else{
-                    router.query.country = ""
-                }
-
-                if (town !== "") {
-                    router.query.town = town
-                    settownValue(town)
-                }
-                else{
-                    router.query.town = ""
-                }
-                router.push(router)
-
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setLoading(false))
+       //to be updated
     }
 
     const [countryValue, setcountryValue] = useState('Country')
