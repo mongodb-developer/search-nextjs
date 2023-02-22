@@ -98,6 +98,6 @@ app.get("/category_list/:category", async (req, res) => {
 });
 
 
-//to be updated
+//Search endpoint goes here
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
