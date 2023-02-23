@@ -109,29 +109,11 @@ const Header = () => {
                 </div>
                 
                 <div className={styles.mobile_head}>
-                    {/* <div className={styles.mobile_header}>
-                        <div className={styles.cirle_red} style={{ backgroundColor: "white", width: "40px", height: "40px" }}>
-                            <BiSearch color='grey' size={20} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <div className={styles.place_name} style={{ fontSize: '13px', fontWeight: 600 }}>Where to?</div>
-                            <div className={styles.greyer} style={{ fontSize: '12px' }}>
-                                Anywhere &#8729; Any week &#8729; Add guests
-                            </div>
-                        </div>
-                        <div className={styles.cirle_red} style={{ backgroundColor: "white", border: '1px solid rgb(235, 235, 235)', width: "40px", height: "40px" }}>
-                            <ImEqualizer color='black' size={16} />
-                        </div>
-                    </div> */}
-
                     <div>
                         <div className={styles.center_div}>
                             <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
-                            <span onClick={() => searchClick('Town')} className={styles.text_filter}>{townValue}</span>
-                            <div className={styles.divider}></div>
-                            {/* <span onClick={()=>searchClick('Price')} className={styles.text_filterv2}>Price range</span> */}
-                            <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
+                          <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
                             </div>
                         </div>
