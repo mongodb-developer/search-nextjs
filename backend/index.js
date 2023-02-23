@@ -98,23 +98,17 @@ app.get("/category_list/:category", async (req, res) => {
 });
 
 
-//get items in each category
+//Search endpoint goes here
 app.get("/search/:search", async (req, res) => {
 
   const queries = JSON.parse(req.params.search)
 
-  const searcher_aggregate = 
-    queries.street !== '' && queries.country === '' ?
-   {
+  // Start building the search aggregation stage
+let searcher_aggregate = {
     "$search": {
       "index": 'search_home',
       "compound": {
         "must": [
-        {"text": {
-          "query": queries.street,
-          "path": 'address.street',
-          "fuzzy": {}
-        }},
         { "text": {
           "query": queries.category,
           "path": 'property_type',
@@ -122,129 +116,103 @@ app.get("/search/:search", async (req, res) => {
         }}
       ]}
     }
-  }
-  :
-  queries.street === '' && queries.country !== '' ?
-  {
-    "$search": {
-      "index": 'search_home',
-      "compound": {
-        "must": [
-       { "text": {
-          "query": queries.country,
-          "path": 'address.country',
-          "fuzzy": {}
-        }},
-        { "text": {
-          "query": queries.category,
-          "path": 'property_type',
-          "fuzzy": {}
-        }}
-      ]}
-    }
-  }
-  :
-  {
-    "$search": {
-      "index": 'search_home',
-      "compound": {
-        "must": [
-        {"text": {
-          "query": queries.street,
-          "path": 'address.street',
-          "fuzzy": {}
-        }},
-       { "text": {
-          "query": queries.country,
-          "path": 'address.country',
-          "fuzzy": {}
-        }},
-        { "text": {
-          "query": queries.category,
-          "path": 'property_type',
-          "fuzzy": {}
-        }}
-      ]}
-    }
+  };
+
+  if (queries.street !== "" && queries.country === "") {
+    searcher_aggregate.$search.compound.must.push(
+      {"text": {
+        "query": queries.street,
+        "path": 'address.street',
+        "fuzzy": {}
+      }});
   }
 
-  let results = [];
-  try {
-    results = await itemCollection.aggregate(
-      [
-        searcher_aggregate
-        ,{
-          '$project': {
-            'accommodates': 1,
-            'price': 1,
-            'property_type': 1,
-            'name': 1,
-            'description': 1,
-            'host': 1,
-            'address': 1,
-            'images': 1,
-            "review_scores": 1
-          }
-        },
-      ]
-    ).limit(50).toArray();
+// If only country is provided, add the search on address.country
+else if (queries.street ==="" && queries.country !== "") {
+    searcher_aggregate.$search.compound.must.push(
+      {"text": {
+        "query": queries.country,
+        "path": 'address.country',
+        "fuzzy": {}
+      }});
   }
-  catch (e) {
-    console.log(e.toString());
+
+// If both street and country is provided, add the search on both address.street and address.country
+else{
+    searcher_aggregate.$search.compound.must.push(
+      {"text": {
+        "query": queries.street,
+        "path": 'address.street',
+        "fuzzy": {}
+      }},
+      { "text": {
+        "query": queries.country,
+        "path": 'address.country',
+        "fuzzy": {}
+      }}
+      );
   }
+  // A projection will help us return only the required fields
+  let projection = {
+    '$project': {
+      'accommodates': 1,
+      'price': 1,
+      'property_type': 1,
+      'name': 1,
+      'description': 1,
+      'host': 1,
+      'address': 1,
+      'images': 1,
+      "review_scores": 1
+    }
+  };
+
+  // We can now execute the aggregation pipeline, and return the first 50 elements
+  let results = await itemCollection.aggregate([ searcher_aggregate, projection ]).limit(50).toArray();
+
   res.send(results).status(200);
-});
-
-//country autocomplete
+})
+//endpoint to handle country autocomplete
 app.get("/country/autocomplete/:param", async (req, res) => {
-  let results = [];
-  try {
-    results = await itemCollection.aggregate(
+  let  results = await itemCollection.aggregate(
       [
         {
           '$search': {
-            'index': 'country_autocomplete', 
+            'index': 'country_autocomplete',
             'autocomplete': {
-              'query': req.params.param, 
+              'query': req.params.param,
               'path': 'address.country',
-            }, 
+            },
             'highlight': {
-              'path': [
-                'address.country'
-              ]
+              'path': [ 'address.country']
             }
           }
         }, {
           '$limit': 1
         }, {
           '$project': {
-            'address.country': 1, 
+            'address.country': 1,
             'highlights': {
               '$meta': 'searchHighlights'
             }
           }
         }
       ]).toArray();
-  }
-  catch (e) {
-    console.log(e.toString());
-  }
+  
   res.send(results).status(200);
-});
+ });
 
-//town autocomplete
+ //endpoint to handle town autocomplete
 app.get("/town/autocomplete/:param", async (req, res) => {
-  let results = [];
-  try {
-    results = await itemCollection.aggregate(
+  let  results = await itemCollection.aggregate(
       [
         {
           '$search': {
-            'index': 'town_autocomplete', 
+            'index': 'town_autocomplete',
             'autocomplete': {
-              'query': req.params.param, 
+              'query': req.params.param,
               'path': 'address.street',
-            }, 
+            },
             'highlight': {
               'path': [
                 'address.street'
@@ -255,18 +223,19 @@ app.get("/town/autocomplete/:param", async (req, res) => {
           '$limit': 5
         }, {
           '$project': {
-            'address.street': 1, 
+            'address.street': 1,
             'highlights': {
               '$meta': 'searchHighlights'
             }
           }
         }
       ]).toArray();
-  }
-  catch (e) {
-    console.log(e.toString());
-  }
+  
   res.send(results).status(200);
-});
+ });
+ 
+ 
+
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
