@@ -60,17 +60,56 @@ const Header = () => {
     } = useCategoryContext()
 
     const handleChange = async (e) => {
-        setCountry(e.target.value);
-
-        //to be updated 
+        if (showing === "Country") {
+            setCountry(e.target.value);
+            if(e.target.value.length > 1){
+                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}country/autocomplete/${e.target.value}`)
+                .then((response) => response.json())
+                .then(async (res) => {
+                    setsug_countries(res)
+                })
+            }
+            else{
+                setsug_countries([])
+            }
+        }
+        else {
+            setTown(e.target.value)
+            if(e.target.value.length > 1){
+                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}town/autocomplete/${e.target.value}`)
+                .then((response) => response.json())
+                .then(async (res) => {
+                    setsug_town(res)
+                })
+            }
+            else{
+                setsug_town([])
+            }
+        }
     }
+ 
 
     const searchNow = async (e) => {
-        e.preventDefault();
         setshow(false)
-
-       //to be updated
+        let search_params = JSON.stringify({
+            street: town,
+            country: country,
+            category: `${activeCategory}`
+        })
+        setLoading(true)
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}search/${search_params}`)
+            .then((response) => response.json())
+            .then(async (res) => {
+                updateCategory(activeCategory, res)
+                router.query = { country, town, category: activeCategory };
+                if (country !== "") { setcountryValue(country);}
+                if (town !== "") { settownValue(town)}
+                router.push(router);
+            })
+            .catch((err) => console.log(err))
+            .finally(() => setLoading(false))
     }
+
 
     const [countryValue, setcountryValue] = useState('Country')
     const [townValue, settownValue] = useState('Town')
