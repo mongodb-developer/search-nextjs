@@ -87,43 +87,29 @@ const Header = () => {
             }
         }
     }
+ 
 
     const searchNow = async (e) => {
-        e.preventDefault();
         setshow(false)
-
         let search_params = JSON.stringify({
             street: town,
-            country: country, 
+            country: country,
             category: `${activeCategory}`
         })
         setLoading(true)
         await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}search/${search_params}`)
             .then((response) => response.json())
             .then(async (res) => {
-                // console.log(res,"porto search")
                 updateCategory(activeCategory, res)
-                if (country !== "") {
-                    router.query.country = country
-                    setcountryValue(country)
-                }
-                else{
-                    router.query.country = ""
-                }
-
-                if (town !== "") {
-                    router.query.town = town
-                    settownValue(town)
-                }
-                else{
-                    router.query.town = ""
-                }
-                router.push(router)
-
+                router.query = { country, town, category: activeCategory };
+                if (country !== "") { setcountryValue(country);}
+                if (town !== "") { settownValue(town)}
+                router.push(router);
             })
             .catch((err) => console.log(err))
             .finally(() => setLoading(false))
     }
+
 
     const [countryValue, setcountryValue] = useState('Country')
     const [townValue, settownValue] = useState('Town')
