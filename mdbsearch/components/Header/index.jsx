@@ -28,27 +28,19 @@ const Header = () => {
     }, [handleClickAway]);
 
     const handleSelected = (val) =>{
-        if (showing === "Country") {
-            setCountry(val);
-            setsug_countries([])
-        }
-        else{
-            setTown(val);
-            setsug_town([])
-        }
+        setCountry(val);
+        setsug_countries([])
     }
 
     const [show, setshow] = useState(false)
     const [showing, setshowing] = useState('')
 
     const [sug_countries, setsug_countries] = useState([])
-    const [sug_town, setsug_town] = useState([])
     
     const searchClick = (click) => {
         setshow(!show)
         setshowing(click)
     }
-    const [town, setTown] = useState('')
     const [country, setCountry] = useState('')
     const router = useRouter();
 
@@ -72,7 +64,6 @@ const Header = () => {
 
 
     const [countryValue, setcountryValue] = useState('Country')
-    const [townValue, settownValue] = useState('Town')
 
     return (
         <div className={styles.header}
@@ -129,8 +120,8 @@ const Header = () => {
                                 <form className={styles.input_cont}>
                                     <input className={styles.input_}
                                         type="text"
-                                        placeholder={showing === "Country" ? "Search by country" : showing === "Town" ? "Search by town" : showing === "Price" ? "Search by price" : ''}
-                                        value={showing === "Country" ? country : town}
+                                        placeholder={"Search by country"}
+                                        value={country}
                                         onChange={handleChange}
                                     />
                                     <button onClick={searchNow}>Search</button>
@@ -153,26 +144,6 @@ const Header = () => {
                                     }
                                 </div>
                                 }
-                                {
-                                    sug_town.length > 0 &&
-                                    <div className={styles.selector_container}>
-                                    {
-                                        sug_town.map((res) => (
-                                            <div key={res._id} className={styles.selector}
-                                                onClick={()=>handleSelected(res?.address?.street)}
-                                            >
-                                                <GrLocation />
-                                                <div>
-                                                    {res?.address?.street}
-                                                </div>
-                                            </div>
-
-                                        ))
-                                    }
-                                </div>
-                                }
-                                
-                                
                             </div>
 
                         </div>
