@@ -33,13 +33,11 @@ const Header = () => {
     }
 
     const [show, setshow] = useState(false)
-    const [showing, setshowing] = useState('')
 
     const [sug_countries, setsug_countries] = useState([])
     
-    const searchClick = (click) => {
+    const searchClick = () => {
         setshow(!show)
-        setshowing(click)
     }
     const [country, setCountry] = useState('')
     const router = useRouter();
@@ -79,7 +77,7 @@ const Header = () => {
                     <Image src={logo} alt="airbnb logo" className={styles.logo_image} />
                     <div>
                         <div className={styles.center_div}>
-                            <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
+                            <div onClick={searchClick} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
                             <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
@@ -102,7 +100,7 @@ const Header = () => {
                 <div className={styles.mobile_head}>
                     <div>
                         <div className={styles.center_div}>
-                            <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
+                            <div onClick={ searchClick} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
                           <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
