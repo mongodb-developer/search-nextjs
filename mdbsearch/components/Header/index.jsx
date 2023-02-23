@@ -59,55 +59,15 @@ const Header = () => {
         activeCategory
     } = useCategoryContext()
 
+
+    
     const handleChange = async (e) => {
-        if (showing === "Country") {
-            setCountry(e.target.value);
-            if(e.target.value.length > 1){
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}country/autocomplete/${e.target.value}`)
-                .then((response) => response.json())
-                .then(async (res) => {
-                    setsug_countries(res)
-                })
-            }
-            else{
-                setsug_countries([])
-            }
-        }
-        else {
-            setTown(e.target.value)
-            if(e.target.value.length > 1){
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}town/autocomplete/${e.target.value}`)
-                .then((response) => response.json())
-                .then(async (res) => {
-                    setsug_town(res)
-                })
-            }
-            else{
-                setsug_town([])
-            }
-        }
+       //Autocomplete function goes here
     }
  
 
     const searchNow = async (e) => {
-        setshow(false)
-        let search_params = JSON.stringify({
-            street: town,
-            country: country,
-            category: `${activeCategory}`
-        })
-        setLoading(true)
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}search/${search_params}`)
-            .then((response) => response.json())
-            .then(async (res) => {
-                updateCategory(activeCategory, res)
-                router.query = { country, town, category: activeCategory };
-                if (country !== "") { setcountryValue(country);}
-                if (town !== "") { settownValue(town)}
-                router.push(router);
-            })
-            .catch((err) => console.log(err))
-            .finally(() => setLoading(false))
+       //Search function goes here
     }
 
 
@@ -130,9 +90,6 @@ const Header = () => {
                         <div className={styles.center_div}>
                             <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
-                            <span onClick={() => searchClick('Town')} className={styles.text_filter}>{townValue}</span>
-                            <div className={styles.divider}></div>
-                            {/* <span onClick={()=>searchClick('Price')} className={styles.text_filterv2}>Price range</span> */}
                             <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
                             </div>
