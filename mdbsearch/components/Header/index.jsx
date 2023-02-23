@@ -59,6 +59,7 @@ const Header = () => {
         activeCategory
     } = useCategoryContext()
 
+    //Autocomplete function goes here
     const handleChange = async (e) => {
         if (showing === "Country") {
             setCountry(e.target.value);
@@ -89,6 +90,7 @@ const Header = () => {
     }
  
 
+    //Search function goes here
     const searchNow = async (e) => {
         setshow(false)
         let search_params = JSON.stringify({
