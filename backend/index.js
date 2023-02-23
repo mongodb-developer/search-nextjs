@@ -100,7 +100,6 @@ app.get("/category_list/:category", async (req, res) => {
 
 //Search endpoint goes here
 app.get("/search/:search", async (req, res) => {
-
   const queries = JSON.parse(req.params.search)
 
   // Start building the search aggregation stage
@@ -109,49 +108,22 @@ let searcher_aggregate = {
       "index": 'search_home',
       "compound": {
         "must": [
+          // get home where queries.category is property_type
         { "text": {
           "query": queries.category,
           "path": 'property_type',
+          "fuzzy": {}
+        }},
+        // get home where queries.country is address.country
+        {"text": {
+          "query": queries.country,
+          "path": 'address.country',
           "fuzzy": {}
         }}
       ]}
     }
   };
 
-  if (queries.street !== "" && queries.country === "") {
-    searcher_aggregate.$search.compound.must.push(
-      {"text": {
-        "query": queries.street,
-        "path": 'address.street',
-        "fuzzy": {}
-      }});
-  }
-
-// If only country is provided, add the search on address.country
-else if (queries.street ==="" && queries.country !== "") {
-    searcher_aggregate.$search.compound.must.push(
-      {"text": {
-        "query": queries.country,
-        "path": 'address.country',
-        "fuzzy": {}
-      }});
-  }
-
-// If both street and country is provided, add the search on both address.street and address.country
-else{
-    searcher_aggregate.$search.compound.must.push(
-      {"text": {
-        "query": queries.street,
-        "path": 'address.street',
-        "fuzzy": {}
-      }},
-      { "text": {
-        "query": queries.country,
-        "path": 'address.country',
-        "fuzzy": {}
-      }}
-      );
-  }
   // A projection will help us return only the required fields
   let projection = {
     '$project': {
@@ -172,7 +144,8 @@ else{
 
   res.send(results).status(200);
 })
-//endpoint to handle country autocomplete
+
+//Country autocomplete endpoint goes here
 app.get("/country/autocomplete/:param", async (req, res) => {
   let  results = await itemCollection.aggregate(
       [
@@ -201,41 +174,6 @@ app.get("/country/autocomplete/:param", async (req, res) => {
   
   res.send(results).status(200);
  });
-
- //endpoint to handle town autocomplete
-app.get("/town/autocomplete/:param", async (req, res) => {
-  let  results = await itemCollection.aggregate(
-      [
-        {
-          '$search': {
-            'index': 'town_autocomplete',
-            'autocomplete': {
-              'query': req.params.param,
-              'path': 'address.street',
-            },
-            'highlight': {
-              'path': [
-                'address.street'
-              ]
-            }
-          }
-        }, {
-          '$limit': 5
-        }, {
-          '$project': {
-            'address.street': 1,
-            'highlights': {
-              '$meta': 'searchHighlights'
-            }
-          }
-        }
-      ]).toArray();
-  
-  res.send(results).status(200);
- });
- 
- 
-
 
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

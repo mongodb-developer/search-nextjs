@@ -28,27 +28,17 @@ const Header = () => {
     }, [handleClickAway]);
 
     const handleSelected = (val) =>{
-        if (showing === "Country") {
             setCountry(val);
             setsug_countries([])
-        }
-        else{
-            setTown(val);
-            setsug_town([])
-        }
     }
 
     const [show, setshow] = useState(false)
-    const [showing, setshowing] = useState('')
 
     const [sug_countries, setsug_countries] = useState([])
-    const [sug_town, setsug_town] = useState([])
     
-    const searchClick = (click) => {
+    const searchClick = () => {
         setshow(!show)
-        setshowing(click)
     }
-    const [town, setTown] = useState('')
     const [country, setCountry] = useState('')
     const router = useRouter();
 
@@ -61,7 +51,6 @@ const Header = () => {
 
     //Autocomplete function goes here
     const handleChange = async (e) => {
-        if (showing === "Country") {
             setCountry(e.target.value);
             if(e.target.value.length > 1){
                 await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}country/autocomplete/${e.target.value}`)
@@ -73,20 +62,7 @@ const Header = () => {
             else{
                 setsug_countries([])
             }
-        }
-        else {
-            setTown(e.target.value)
-            if(e.target.value.length > 1){
-                await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}town/autocomplete/${e.target.value}`)
-                .then((response) => response.json())
-                .then(async (res) => {
-                    setsug_town(res)
-                })
-            }
-            else{
-                setsug_town([])
-            }
-        }
+       
     }
  
 
@@ -94,7 +70,6 @@ const Header = () => {
     const searchNow = async (e) => {
         setshow(false)
         let search_params = JSON.stringify({
-            street: town,
             country: country,
             category: `${activeCategory}`
         })
@@ -103,9 +78,9 @@ const Header = () => {
             .then((response) => response.json())
             .then(async (res) => {
                 updateCategory(activeCategory, res)
-                router.query = { country, town, category: activeCategory };
-                if (country !== "") { setcountryValue(country);}
-                if (town !== "") { settownValue(town)}
+                router.query = { country, category: activeCategory };
+                // if (country !== "") { }
+                setcountryValue(country);
                 router.push(router);
             })
             .catch((err) => console.log(err))
@@ -114,7 +89,6 @@ const Header = () => {
 
 
     const [countryValue, setcountryValue] = useState('Country')
-    const [townValue, settownValue] = useState('Town')
 
     return (
         <div className={styles.header}
@@ -130,11 +104,8 @@ const Header = () => {
                     <Image src={logo} alt="airbnb logo" className={styles.logo_image} />
                     <div>
                         <div className={styles.center_div}>
-                            <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
+                            <div onClick={searchClick} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
-                            <span onClick={() => searchClick('Town')} className={styles.text_filter}>{townValue}</span>
-                            <div className={styles.divider}></div>
-                            {/* <span onClick={()=>searchClick('Price')} className={styles.text_filterv2}>Price range</span> */}
                             <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
                             </div>
@@ -154,29 +125,11 @@ const Header = () => {
                 </div>
                 
                 <div className={styles.mobile_head}>
-                    {/* <div className={styles.mobile_header}>
-                        <div className={styles.cirle_red} style={{ backgroundColor: "white", width: "40px", height: "40px" }}>
-                            <BiSearch color='grey' size={20} />
-                        </div>
-                        <div style={{ flex: 1 }}>
-                            <div className={styles.place_name} style={{ fontSize: '13px', fontWeight: 600 }}>Where to?</div>
-                            <div className={styles.greyer} style={{ fontSize: '12px' }}>
-                                Anywhere &#8729; Any week &#8729; Add guests
-                            </div>
-                        </div>
-                        <div className={styles.cirle_red} style={{ backgroundColor: "white", border: '1px solid rgb(235, 235, 235)', width: "40px", height: "40px" }}>
-                            <ImEqualizer color='black' size={16} />
-                        </div>
-                    </div> */}
-
                     <div>
                         <div className={styles.center_div}>
                             <div onClick={() => searchClick('Country')} className={styles.text_filter}>{countryValue}</div>
                             <div className={styles.divider}></div>
-                            <span onClick={() => searchClick('Town')} className={styles.text_filter}>{townValue}</span>
-                            <div className={styles.divider}></div>
-                            {/* <span onClick={()=>searchClick('Price')} className={styles.text_filterv2}>Price range</span> */}
-                            <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
+                          <div className={styles.cirle_red} style={{ backgroundColor: "var(--main)" }}>
                                 <BiSearch color='white' />
                             </div>
                         </div>
@@ -192,8 +145,8 @@ const Header = () => {
                                 <form className={styles.input_cont}>
                                     <input className={styles.input_}
                                         type="text"
-                                        placeholder={showing === "Country" ? "Search by country" : showing === "Town" ? "Search by town" : showing === "Price" ? "Search by price" : ''}
-                                        value={showing === "Country" ? country : town}
+                                        placeholder={"Search by country"}
+                                        value={country}
                                         onChange={handleChange}
                                     />
                                     <button onClick={searchNow}>Search</button>
@@ -216,26 +169,6 @@ const Header = () => {
                                     }
                                 </div>
                                 }
-                                {
-                                    sug_town.length > 0 &&
-                                    <div className={styles.selector_container}>
-                                    {
-                                        sug_town.map((res) => (
-                                            <div key={res._id} className={styles.selector}
-                                                onClick={()=>handleSelected(res?.address?.street)}
-                                            >
-                                                <GrLocation />
-                                                <div>
-                                                    {res?.address?.street}
-                                                </div>
-                                            </div>
-
-                                        ))
-                                    }
-                                </div>
-                                }
-                                
-                                
                             </div>
 
                         </div>
